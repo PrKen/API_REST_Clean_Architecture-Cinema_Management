@@ -1,7 +1,7 @@
 package com.example.application.services;
 
 import com.example.adapters.events.ReservationEvent;
-import com.example.adapters.messaging.KafkaProducerService;
+//import com.example.adapters.messaging.KafkaProducerService;
 import com.example.application.dto.ReservationDTO;
 import com.example.application.usecase.reservation.*;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class ReservationService {
     private final FindReservationByClientUseCase findReservationByClientUseCase;
     private final FindReservationBySeanceUseCase findReservationBySeanceUseCase;
     private final UpdateReservationUseCase updateReservationUseCase;
-    private final KafkaProducerService kafkaProducerService;
+    //private final KafkaProducerService kafkaProducerService;
 
     public ReservationService(GetAllReservationsUseCase getAllReservationsUseCase,
                               GetReservationByIdUseCase getReservationByIdUseCase,
@@ -26,8 +26,8 @@ public class ReservationService {
                               DeleteReservationUseCase deleteReservationUseCase,
                               FindReservationByClientUseCase findReservationByClientUseCase,
                               FindReservationBySeanceUseCase findReservationBySeanceUseCase,
-                              UpdateReservationUseCase updateReservationUseCase,
-                              KafkaProducerService kafkaProducerService) {
+                              UpdateReservationUseCase updateReservationUseCase
+                              /*KafkaProducerService kafkaProducerService*/) {
         this.getAllReservationsUseCase = getAllReservationsUseCase;
         this.getReservationByIdUseCase = getReservationByIdUseCase;
         this.addReservationUseCase = addReservationUseCase;
@@ -35,7 +35,7 @@ public class ReservationService {
         this.findReservationByClientUseCase = findReservationByClientUseCase;
         this.findReservationBySeanceUseCase = findReservationBySeanceUseCase;
         this.updateReservationUseCase = updateReservationUseCase;
-        this.kafkaProducerService = kafkaProducerService;
+        //this.kafkaProducerService = kafkaProducerService;
     }
 
     public List<ReservationDTO> getAllReservations() {
@@ -50,12 +50,12 @@ public class ReservationService {
         // Call the use case to create a reservation
         ReservationDTO createdReservation = addReservationUseCase.execute(reservationDTO);
 
-        // Create and send a Kafka event
+        /* Create and send a Kafka event
         ReservationEvent event = new ReservationEvent(
                 createdReservation.getId(),
                 "CREATED"
         );
-        kafkaProducerService.sendReservationEvent(event);
+        kafkaProducerService.sendReservationEvent(event); */
 
         return createdReservation;
     }
@@ -63,9 +63,9 @@ public class ReservationService {
     public void deleteReservation(Long id) {
         deleteReservationUseCase.execute(id);
 
-        // Create and send a Kafka event for deletion
+        /* Create and send a Kafka event for deletion
         ReservationEvent event = new ReservationEvent(id, "DELETED");
-        kafkaProducerService.sendReservationEvent(event);
+        kafkaProducerService.sendReservationEvent(event); */
     }
 
     public List<ReservationDTO> findByClient(Long clientId) {
@@ -80,12 +80,12 @@ public class ReservationService {
         // Call the use case to update the reservation
         ReservationDTO updatedReservation = updateReservationUseCase.execute(id, reservationDTO);
 
-        // Create and send a Kafka event for the update
+        /* Create and send a Kafka event for the update
         ReservationEvent event = new ReservationEvent(
                 updatedReservation.getId(),
                 "UPDATED"
         );
-        kafkaProducerService.sendReservationEvent(event);
+        kafkaProducerService.sendReservationEvent(event); */
 
         return updatedReservation;
     }
